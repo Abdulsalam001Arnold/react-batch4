@@ -3,6 +3,7 @@ import { useState } from "react"
 import userStore from "../store/userStore"
 import { useNavigate } from "react-router-dom"
 import Loader from "../components/Loader"
+import { ToastContainer, toast } from "react-toastify"
 
 export default function Signup() {
     const [username, setUsername] = useState("")
@@ -21,7 +22,8 @@ const navigate = useNavigate()
           await signup(username, email, password)
           navigate('/')
         }catch(err) {
-            throw err
+            toast.error(err.response.data.message)
+            console.log(err)
         }finally{
             setUsername("")
             setEmail("")

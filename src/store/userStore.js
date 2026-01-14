@@ -5,7 +5,7 @@ import api from "../api/api";
 
 const userStore = create((set) => ({
      user: null,
-    //  loading: true,
+     loading: true,
 
 
      signup: async (username, email, password) => {
