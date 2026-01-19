@@ -1,5 +1,6 @@
 
 import { useEffect, useState, useRef } from "react"
+import { Link } from "react-router-dom"
 import {toast, ToastContainer} from "react-toastify"
 
 export default function Home() {
@@ -30,13 +31,18 @@ export default function Home() {
 
 
     return(
-        <div>
+        <div className="mt-[3rem]">
             <ToastContainer/>
             <h2>
                 This is my home page
             </h2>
 
-            <div className="bg-red-600 w-[20rem] h-[20rem]"></div>
+            <Link to="/post-confessions">
+                <button>
+                    Post Confession
+                </button>
+            </Link>
+
 
             <div className="mt-9 flex flex-col item-center w-full justify-center">
                 {characters.map((character) => (

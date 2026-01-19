@@ -8,13 +8,26 @@ const userStore = create((set) => ({
      loading: true,
 
 
+     checkAuth: async () => {
+        try{
+            const response = await api.get('/auth/me')
+            if(response.data.success) {
+                set({user: response.data.data, loading: false})
+            }else{
+                set({user: null, loading: false})
+            }
+        }catch(err){
+            throw err;
+        }
+     },
+
      signup: async (username, email, password) => {
         try{
             const response = await api.post('/auth/signup', {username, email, password})
             if(response.data.success) {
-                set({user: response.data.data})
+                set({user: response.data.data, loading: false})
             }else{
-                set({user: null})
+                set({user: null, loading: false})
             }
         }catch(err){
             throw err;
@@ -25,9 +38,9 @@ const userStore = create((set) => ({
         try{
             const response = await api.post('/auth/login', {email, password})
             if(response.data.success) {
-                set({user: response.data.data})
+                set({user: response.data.data, loading: false})
             }else{
-                set({user: null})
+                set({user: null, loading: false})
             }
         }catch(err){
             throw err;

@@ -1,200 +1,96 @@
-"use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
-import userStore from "../store/userStore";
-import { Link, useHref } from "react-router-dom";
-const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
+import { Link } from "react-router-dom"
+import userStore from "../store/userStore"
+export default function Navbar() {
   const {user} = userStore()
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
-  const menuRef = useRef(null);
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      if (scrollY > 50) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-    };
+  return(
+<header class="bg-white">
+  <nav aria-label="Global" class="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
+    <div class="flex lg:flex-1">
+      <a href="" class="-m-1.5 p-1.5">
+        <span class="sr-only">Your Company</span>
+        <h1 className="text-xl font-bold">
+          {user?.username}
+        </h1>
+      </a>
+    </div>
 
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
-  // Close the mobile menu on page change
-  useEffect(() => {
-    setIsOpen(false);
-  }, []);
-
-  // Close the mobile menu when clicking outside of it
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        isOpen &&
-        menuRef.current &&
-        !menuRef?.current?.contains(event.target)
-      ) {
-        setIsOpen(false);
-      }
-    };
-
-    window.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      window.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isOpen]);
-
-  return (
-    <motion.nav
-      className={`bg-[rgb(29,28,34)] p-2 w-full fixed top-0 z-[60] ${
-        isScrolled ? "bg-opacity-90 shadow-md" : "bg-opacity-100"
-      }`}
-      initial={{ y: -100, opacity: 0.32 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{
-        ease: "easeOut",
-        type: "spring",
-        stiffness: 500,
-        duration: 0.5,
-      }}>
-      <div className="container mx-auto flex justify-between items-center">
-        <Link href="/">
-          <div className="text-white text-xl font-bold">
-            <h1 className="text-4xl dancing-script-topic inline">{user?.username}</h1>{" "}
-            <span className="text-3xl green">.</span>
-          </div>
-        </Link>
-
-        {/* Hamburger Icon */}
-        <button className="block md:hidden text-white" onClick={toggleMenu}>
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg">
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M4 6h16M4 12h16M4 18h16"
-            />
-          </svg>
+    <el-popover-group class="hidden lg:flex lg:gap-x-12">
+      <div class="relative">
+        <Link to='/'>
+        <button popovertarget="desktop-menu-product" class="flex items-center gap-x-1 text-sm/6 font-semibold text-gray-900">
+          Home
         </button>
-
-        {/* Links for Desktop */}
-        <div className="hidden md:flex space-x-6">
-          <li className="flex flex-col items-center justify-center gap-1 text-xl md:text-xl lg:text-[14px] mb-6 md:mb-5 lg:mb-0">
-            <Link
-              href="/"
-              className={`block py-2 px-4 links relative margarine-regular text-white`}>
-              Home
-            </Link>
-          </li>
-          <li className="flex flex-col items-center justify-center gap-1 text-xl md:text-xl lg:text-[14px] mb-6 md:mb-5 lg:mb-0">
-            <Link
-              href="/projects"
-              className={`block py-2 px-4 links relative margarine-regular`}>
-              My Projects
-              <span
-                className={`absolute bottom-0 left-0 h-1 bg-green-500 transition-all duration-300 ${
-                  location === "/projects" ? "w-full" : "hover:w-full w-0"
-                }`}></span>
-            </Link>
-          </li>
-          <li className="flex flex-col items-center justify-center gap-1 text-xl md:text-xl lg:text-[14px] mb-6 md:mb-5 lg:mb-0">
-            <Link
-              href="/about"
-              className={`block py-2 px-4 links relative margarine-regular text-white`}>
-              About
-            </Link>
-          </li>
-
-          <li className="flex flex-col items-center justify-center gap-1 text-xl md:text-xl lg:text-[14px]">
-            <Link
-              href="/contact"
-              className={`block py-2 px-4 links relative margarine-regular  text-white`}>
-              Contact
-            </Link>
-          </li>
-        </div>
-
-        {/* Side panel for mobile */}
-        <div
-          ref={menuRef}
-          className={`fixed top-0 left-0 w-64 h-full bg-[rgb(29,28,34)] text-white transform ${
-            isOpen ? "translate-x-0 absolute z-50" : "-translate-x-full"
-          } transition-transform duration-300 ease-in-out md:hidden`}>
-          <button className="absolute top-4 right-4" onClick={toggleMenu}>
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
-
-          <Link href="/">
-            <div className="text-white text-xl font-bold">
-              <h1 className="text-xl dancing-script-topic inline">
-                Lanre Abdulsalam
-              </h1>{" "}
-              <span className="text-3xl green">.</span>
-            </div>
-          </Link>
-
-          <ul className="mt-0 space-y-4 p-3 absolute z-60 bg-[rgb(29,28,34)]">
-            <li className="flex flex-col items-center justify-center gap-1 text-xl md:text-4xl lg:text-[14px] mb-6 md:mb-5 lg:mb-0">
-              <Link
-                href="/"
-                className={`block py-2 px-4 links relative margarine-regular text-white`}>
-                Home            
-              </Link>
-            </li>
-            <li className="flex flex-col items-center justify-center gap-1 text-xl md:text-4xl lg:text-[14px] mb-6 md:mb-5 lg:mb-0">
-              <Link
-                href="/projects"
-                className={`block py-2 px-4 links relative margarine-regular text-white`}>
-                My Projects
-              </Link>
-            </li>
-            <li className="flex flex-col items-center justify-center gap-1 text-xl md:text-4xl lg:text-[14px] mb-6 md:mb-5 lg:mb-0">
-              <Link
-                href="/about"
-                className={`block py-2 px-4 links relative margarine-regular text-white`}>
-                About
-              </Link>
-            </li>
-
-            <li className="flex flex-col items-center justify-center gap-1 text-xl md:text-4xl lg:text-[14px]">
-              <Link
-                href="/contact"
-                className={`block py-2 px-4 links relative margarine-regular text-white`}>
-                Contact
-                
-              </Link>
-            </li>
-          </ul>
-        </div>
+        </Link>
       </div>
-    </motion.nav>
-  );
-};
 
-export default React.memo(Navbar);
+      <Link to='/confessions'>
+      <span href="" class="text-sm/6 font-semibold text-gray-900">Confessions</span>
+      </Link>
+      <Link to='/post-confessions'>
+      <span href="" class="text-sm/6 font-semibold text-gray-900">Post Confessions</span>
+      </Link>
+      <Link to='/about'>
+      <span href="" class="text-sm/6 font-semibold text-gray-900">About</span>
+      </Link>
+    </el-popover-group>
+
+{user ? (
+  <div></div>
+): (
+    <div>
+    <div class="hidden lg:flex lg:flex-1 lg:justify-end">
+      <a href="/login" class="text-sm/6 font-semibold text-gray-900">Log in <span aria-hidden="true">&rarr;</span></a>
+    </div>
+
+    <div class="hidden lg:flex lg:flex-1 lg:justify-end">
+      <a href="/signup" class="text-sm/6 font-semibold text-gray-900">Sign up <span aria-hidden="true">&rarr;</span></a>
+    </div>
+
+    </div>
+)}
+  </nav>
+  <el-dialog>
+    <dialog id="mobile-menu" class="backdrop:bg-transparent lg:hidden">
+      <div tabindex="0" class="fixed inset-0 focus:outline-none">
+        <el-dialog-panel class="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white p-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+          <div class="flex items-center justify-between">
+            <h1 class="text-xl font-bold">
+              {user?.username}
+            </h1>
+            <button type="button" command="close" commandfor="mobile-menu" class="-m-2.5 rounded-md p-2.5 text-gray-700">
+              <span class="sr-only">Close menu</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon" aria-hidden="true" class="size-6">
+                <path d="M6 18 18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+          </div>
+          <div class="mt-6 flow-root">
+            <div class="-my-6 divide-y divide-gray-500/10">
+              <div class="space-y-2 py-6">
+                <div class="-mx-3">
+                  <button type="button" command="--toggle" commandfor="products" class="flex w-full items-center justify-between rounded-lg py-2 pr-3.5 pl-3 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">
+                    Home
+                  </button>
+                </div>
+                <a href="/confessions" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Confessions</a>
+                <a href="/post-confessions" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Post Confessions</a>
+                <a href="/about" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">About</a>
+              </div>
+
+              {user ? (
+                <div></div>
+              ): (
+              <div class="py-6">
+                <a href="#" class="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Log in</a>
+              </div>
+              )}
+            </div>
+          </div>
+        </el-dialog-panel>
+      </div>
+    </dialog>
+  </el-dialog>
+</header>
+  )
+}
