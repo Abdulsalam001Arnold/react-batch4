@@ -6,6 +6,7 @@ import Home from './Pages/Home'
 import About from './Pages/About'
 import Navbar from './components/Navbar'
 import Login from './Pages/Login'
+import Test from './Pages/Test'
 import Signup from './Pages/Signup'
 import PostConfessions from './Pages/Post-Confessions'
 import Confessions from './Pages/Confessions'
@@ -27,6 +28,7 @@ useEffect(() => {
           <Route path='/' element={<Home/>}/>
           <Route path='/about' element={<About/>}/>
           <Route path='/login' element={<Login/>}/>
+          <Route path='/test' element={<Test/>}/>
           <Route path='/signup' element={<Signup/>}/>
 
           {/* Protected Routes */}
